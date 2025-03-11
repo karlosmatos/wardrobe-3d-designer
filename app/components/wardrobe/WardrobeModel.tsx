@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useRef, useEffect } from 'react';
-import { useFrame } from '@react-three/fiber';
-import { useGLTF, OrbitControls } from '@react-three/drei';
+import React from 'react';
+import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 import useWardrobeStore from '../../store/wardrobeStore';
 import { WardrobeComponent } from '../../types/wardrobe';
