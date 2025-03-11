@@ -1,7 +1,7 @@
 "use client";
 
 import { v4 as uuidv4 } from 'uuid';
-import { WardrobeConfiguration, WardrobeType } from '../types/wardrobe';
+import { WardrobeConfiguration } from '../types/wardrobe';
 
 // Template wardrobe configurations
 export const wardrobeTemplates: {

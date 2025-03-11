@@ -110,17 +110,12 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({ isOpen, onClose }) 
                       onClick={() => handleSelectTemplate(template.id)}
                     >
                       <div className="relative h-48 bg-gray-100">
-                        {/* Placeholder for template image */}
-                        <div className="absolute inset-0 flex items-center justify-center bg-gray-200">
-                          <span className="text-gray-500">Template Preview</span>
-                        </div>
-                        {/* Uncomment when images are available */}
-                        {/* <Image 
+                        <Image 
                           src={template.imageUrl} 
                           alt={template.name}
                           fill
                           className="object-cover"
-                        /> */}
+                        />
                       </div>
                       <div className="p-4">
                         <h4 className="font-medium text-lg text-gray-900">{template.name}</h4>
