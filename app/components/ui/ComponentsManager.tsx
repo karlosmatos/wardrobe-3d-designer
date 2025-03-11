@@ -1,7 +1,24 @@
 "use client";
 
 import React, { useState } from 'react';
-import { PlusIcon, TrashIcon, PencilIcon, CheckIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { 
+  PlusIcon, 
+  TrashIcon, 
+  PencilIcon, 
+  CheckIcon, 
+  XMarkIcon,
+  Square3Stack3DIcon,
+  SquaresPlusIcon,
+  RectangleGroupIcon,
+  ViewColumnsIcon,
+  ArrowsUpDownIcon,
+  ShoppingBagIcon,
+  Bars3BottomLeftIcon,
+  LightBulbIcon,
+  RectangleStackIcon,
+  CubeIcon,
+  EyeIcon
+} from '@heroicons/react/24/outline';
 import useWardrobeStore from '../../store/wardrobeStore';
 import { Listbox } from '@headlessui/react';
 import { ChevronUpDownIcon } from '@heroicons/react/20/solid';
@@ -11,6 +28,14 @@ const componentTypes = [
   { type: 'drawer', name: 'Drawer' },
   { type: 'rail', name: 'Hanging Rail' },
   { type: 'door', name: 'Door' },
+  { type: 'divider', name: 'Vertical Divider' },
+  { type: 'shoe_rack', name: 'Shoe Rack' },
+  { type: 'trouser_rack', name: 'Trouser Rack' },
+  { type: 'tie_rack', name: 'Tie/Belt Rack' },
+  { type: 'mirror', name: 'Mirror' },
+  { type: 'lighting', name: 'LED Lighting' },
+  { type: 'jewelry_tray', name: 'Jewelry Tray' },
+  { type: 'pull_out', name: 'Pull-Out Basket' },
 ] as const;
 
 const ComponentsManager: React.FC = () => {
@@ -59,6 +84,54 @@ const ComponentsManager: React.FC = () => {
       position: { x: 0, y: dimensions.height / 2, z: dimensions.depth / 2 },
       dimensions: { width: dimensions.width / 2 - 5, height: dimensions.height - 4, depth: 2 },
       material: configuration.materials.doors,
+    },
+    divider: {
+      type: 'divider' as const,
+      position: { x: dimensions.width / 2, y: dimensions.height / 2, z: 0 },
+      dimensions: { width: 2, height: dimensions.height - 10, depth: dimensions.depth - 10 },
+      material: configuration.materials.body,
+    },
+    shoe_rack: {
+      type: 'shoe_rack' as const,
+      position: { x: 0, y: 20, z: 0 },
+      dimensions: { width: dimensions.width - 10, height: 15, depth: dimensions.depth - 10 },
+      material: configuration.materials.body,
+    },
+    trouser_rack: {
+      type: 'trouser_rack' as const,
+      position: { x: 0, y: dimensions.height / 2, z: dimensions.depth / 3 },
+      dimensions: { width: dimensions.width - 20, height: 5, depth: 40 },
+      material: configuration.materials.handles,
+    },
+    tie_rack: {
+      type: 'tie_rack' as const,
+      position: { x: dimensions.width / 4, y: dimensions.height / 2, z: dimensions.depth - 10 },
+      dimensions: { width: 30, height: 5, depth: 10 },
+      material: configuration.materials.handles,
+    },
+    mirror: {
+      type: 'mirror' as const,
+      position: { x: 0, y: dimensions.height / 2, z: dimensions.depth / 2 },
+      dimensions: { width: dimensions.width / 3, height: dimensions.height / 2, depth: 1 },
+      material: 'mat1', // Default to white material
+    },
+    lighting: {
+      type: 'lighting' as const,
+      position: { x: 0, y: dimensions.height - 5, z: 0 },
+      dimensions: { width: dimensions.width - 20, height: 2, depth: 2 },
+      material: 'mat6', // Chrome material
+    },
+    jewelry_tray: {
+      type: 'jewelry_tray' as const,
+      position: { x: 0, y: dimensions.height / 3, z: 0 },
+      dimensions: { width: dimensions.width / 3, height: 5, depth: dimensions.depth / 2 },
+      material: configuration.materials.body,
+    },
+    pull_out: {
+      type: 'pull_out' as const,
+      position: { x: 0, y: dimensions.height / 4, z: dimensions.depth / 2 },
+      dimensions: { width: dimensions.width - 20, height: 15, depth: dimensions.depth - 20 },
+      material: configuration.materials.body,
     },
   };
   
@@ -118,17 +191,67 @@ const ComponentsManager: React.FC = () => {
     <div className="w-full p-4">
       <h2 className="text-xl font-semibold mb-4 text-gray-900">Add Components</h2>
       
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        {componentTypes.map((componentType) => (
-          <button
-            key={componentType.type}
-            onClick={() => handleAddComponent(componentType.type as keyof typeof defaultComponentValues)}
-            className="flex items-center justify-center p-3 bg-white rounded-lg shadow hover:bg-gray-50 border border-gray-200"
-          >
-            <PlusIcon className="h-5 w-5 mr-2 text-blue-700" />
-            <span className="text-gray-900">Add {componentType.name}</span>
-          </button>
-        ))}
+      <div className="mb-6">
+        <h3 className="text-lg font-medium mb-3 text-gray-800">Storage Components</h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {componentTypes
+            .filter(c => ['shelf', 'drawer', 'divider', 'pull_out'].includes(c.type))
+            .map((componentType) => (
+              <button
+                key={componentType.type}
+                onClick={() => handleAddComponent(componentType.type as keyof typeof defaultComponentValues)}
+                className="flex items-center justify-center p-3 bg-white rounded-lg shadow hover:bg-gray-50 border border-gray-200"
+              >
+                {componentType.type === 'shelf' && <Square3Stack3DIcon className="h-5 w-5 mr-2 text-blue-700" />}
+                {componentType.type === 'drawer' && <SquaresPlusIcon className="h-5 w-5 mr-2 text-blue-700" />}
+                {componentType.type === 'divider' && <ViewColumnsIcon className="h-5 w-5 mr-2 text-blue-700" />}
+                {componentType.type === 'pull_out' && <CubeIcon className="h-5 w-5 mr-2 text-blue-700" />}
+                <span className="text-gray-900">Add {componentType.name}</span>
+              </button>
+            ))}
+        </div>
+      </div>
+      
+      <div className="mb-6">
+        <h3 className="text-lg font-medium mb-3 text-gray-800">Clothing Organization</h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {componentTypes
+            .filter(c => ['rail', 'shoe_rack', 'trouser_rack', 'tie_rack'].includes(c.type))
+            .map((componentType) => (
+              <button
+                key={componentType.type}
+                onClick={() => handleAddComponent(componentType.type as keyof typeof defaultComponentValues)}
+                className="flex items-center justify-center p-3 bg-white rounded-lg shadow hover:bg-gray-50 border border-gray-200"
+              >
+                {componentType.type === 'rail' && <ArrowsUpDownIcon className="h-5 w-5 mr-2 text-blue-700" />}
+                {componentType.type === 'shoe_rack' && <ShoppingBagIcon className="h-5 w-5 mr-2 text-blue-700" />}
+                {componentType.type === 'trouser_rack' && <RectangleGroupIcon className="h-5 w-5 mr-2 text-blue-700" />}
+                {componentType.type === 'tie_rack' && <Bars3BottomLeftIcon className="h-5 w-5 mr-2 text-blue-700" />}
+                <span className="text-gray-900">Add {componentType.name}</span>
+              </button>
+            ))}
+        </div>
+      </div>
+      
+      <div className="mb-6">
+        <h3 className="text-lg font-medium mb-3 text-gray-800">Accessories & Finishing</h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {componentTypes
+            .filter(c => ['door', 'mirror', 'lighting', 'jewelry_tray'].includes(c.type))
+            .map((componentType) => (
+              <button
+                key={componentType.type}
+                onClick={() => handleAddComponent(componentType.type as keyof typeof defaultComponentValues)}
+                className="flex items-center justify-center p-3 bg-white rounded-lg shadow hover:bg-gray-50 border border-gray-200"
+              >
+                {componentType.type === 'door' && <RectangleStackIcon className="h-5 w-5 mr-2 text-blue-700" />}
+                {componentType.type === 'mirror' && <EyeIcon className="h-5 w-5 mr-2 text-blue-700" />}
+                {componentType.type === 'lighting' && <LightBulbIcon className="h-5 w-5 mr-2 text-blue-700" />}
+                {componentType.type === 'jewelry_tray' && <SquaresPlusIcon className="h-5 w-5 mr-2 text-blue-700" />}
+                <span className="text-gray-900">Add {componentType.name}</span>
+              </button>
+            ))}
+        </div>
       </div>
       
       {components.length > 0 ? (
@@ -154,7 +277,21 @@ const ComponentsManager: React.FC = () => {
                     return (
                       <tr key={component.id}>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                          {componentTypes.find(t => t.type === component.type)?.name || component.type}
+                          <div className="flex items-center">
+                            {component.type === 'shelf' && <Square3Stack3DIcon className="h-5 w-5 mr-2 text-blue-700" />}
+                            {component.type === 'drawer' && <SquaresPlusIcon className="h-5 w-5 mr-2 text-blue-700" />}
+                            {component.type === 'divider' && <ViewColumnsIcon className="h-5 w-5 mr-2 text-blue-700" />}
+                            {component.type === 'pull_out' && <CubeIcon className="h-5 w-5 mr-2 text-blue-700" />}
+                            {component.type === 'rail' && <ArrowsUpDownIcon className="h-5 w-5 mr-2 text-blue-700" />}
+                            {component.type === 'shoe_rack' && <ShoppingBagIcon className="h-5 w-5 mr-2 text-blue-700" />}
+                            {component.type === 'trouser_rack' && <RectangleGroupIcon className="h-5 w-5 mr-2 text-blue-700" />}
+                            {component.type === 'tie_rack' && <Bars3BottomLeftIcon className="h-5 w-5 mr-2 text-blue-700" />}
+                            {component.type === 'door' && <RectangleStackIcon className="h-5 w-5 mr-2 text-blue-700" />}
+                            {component.type === 'mirror' && <EyeIcon className="h-5 w-5 mr-2 text-blue-700" />}
+                            {component.type === 'lighting' && <LightBulbIcon className="h-5 w-5 mr-2 text-blue-700" />}
+                            {component.type === 'jewelry_tray' && <SquaresPlusIcon className="h-5 w-5 mr-2 text-blue-700" />}
+                            {componentTypes.find(t => t.type === component.type)?.name || component.type}
+                          </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                           {isEditing ? (

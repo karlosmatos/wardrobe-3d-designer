@@ -16,7 +16,7 @@ export type WardrobeDimensions = {
 
 export type WardrobeComponent = {
   id: string;
-  type: 'shelf' | 'drawer' | 'rail' | 'door';
+  type: 'shelf' | 'drawer' | 'rail' | 'door' | 'divider' | 'shoe_rack' | 'trouser_rack' | 'tie_rack' | 'mirror' | 'lighting' | 'jewelry_tray' | 'pull_out';
   position: {
     x: number;
     y: number;
