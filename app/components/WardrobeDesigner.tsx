@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import WardrobeScene from './wardrobe/WardrobeScene';
 import WardrobeTypeSelector from './ui/WardrobeTypeSelector';
 import DimensionsControl from './ui/DimensionsControl';
@@ -49,17 +49,8 @@ const WardrobeDesigner: React.FC = () => {
     }
   }, [isDesktop]);
   
-  // Handle mouse down on the resize handle
-  const handleMouseDown = (e: React.MouseEvent) => {
-    e.preventDefault();
-    isDraggingRef.current = true;
-    setShowTooltip(false);
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseup', handleMouseUp);
-  };
-  
-  // Handle mouse move while dragging
-  const handleMouseMove = (e: MouseEvent) => {
+  // Use useCallback to memoize the event handlers
+  const handleMouseMove = useCallback((e: MouseEvent) => {
     if (!isDraggingRef.current || !containerRef.current) return;
     
     const containerRect = containerRef.current.getBoundingClientRect();
@@ -69,22 +60,38 @@ const WardrobeDesigner: React.FC = () => {
     // Calculate percentage (clamped between 30% and 80%)
     const newWidthPercent = Math.min(Math.max((mouseX / containerWidth) * 100, 30), 80);
     setLeftPanelWidth(newWidthPercent);
-  };
+  }, []);
   
-  // Handle mouse up to stop dragging
-  const handleMouseUp = () => {
+  // We need to use a ref for handleMouseMove to avoid circular dependencies
+  const handleMouseMoveRef = useRef(handleMouseMove);
+  
+  // Update the ref when handleMouseMove changes
+  useEffect(() => {
+    handleMouseMoveRef.current = handleMouseMove;
+  }, [handleMouseMove]);
+  
+  const handleMouseUp = useCallback(() => {
     isDraggingRef.current = false;
-    document.removeEventListener('mousemove', handleMouseMove);
+    document.removeEventListener('mousemove', handleMouseMoveRef.current);
     document.removeEventListener('mouseup', handleMouseUp);
-  };
+  }, []);
+  
+  // Handle mouse down on the resize handle
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    isDraggingRef.current = true;
+    setShowTooltip(false);
+    document.addEventListener('mousemove', handleMouseMoveRef.current);
+    document.addEventListener('mouseup', handleMouseUp);
+  }, [handleMouseUp]);
   
   // Clean up event listeners on unmount
   useEffect(() => {
     return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mousemove', handleMouseMoveRef.current);
       document.removeEventListener('mouseup', handleMouseUp);
     };
-  }, []);
+  }, [handleMouseUp]);
   
   return (
     <div ref={containerRef} className="flex flex-col lg:flex-row h-screen bg-gray-100 relative">

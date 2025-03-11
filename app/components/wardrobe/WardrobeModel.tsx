@@ -145,7 +145,7 @@ const Rail: React.FC<{ component: WardrobeComponent }> = ({ component }) => {
       position={[position.x, position.y, position.z]} 
       material={new THREE.MeshStandardMaterial({ color: '#c0c0c0', metalness: 0.8 })}
     >
-      <cylinderGeometry args={[1, 1, dimensions.width, 16]} rotation={[0, 0, Math.PI / 2]} />
+      <cylinderGeometry args={[1, 1, dimensions.width, 16]} />
     </mesh>
   );
 };
@@ -182,7 +182,7 @@ const Door: React.FC<{ component: WardrobeComponent }> = ({ component }) => {
           metalness: 0.8,
         })}
       >
-        <cylinderGeometry args={[1, 1, 10, 16]} rotation={[Math.PI / 2, 0, 0]} />
+        <cylinderGeometry args={[1, 1, 10, 16]} />
       </mesh>
     </group>
   );
