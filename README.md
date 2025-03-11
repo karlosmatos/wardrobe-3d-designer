@@ -1,60 +1,62 @@
-# 3D Wardrobe Designer
+# Wardrobe 3D Designer
 
-A web application built with Next.js and Three.js that allows users to design custom wardrobes in 3D.
+A powerful web application for designing custom wardrobes in 3D. This tool allows users to create, customize, and visualize wardrobe designs before purchasing.
 
 ## Features
 
-- Choose from different wardrobe types (standard, corner, sliding, walk-in)
-- Customize dimensions (width, height, depth)
-- Select materials for different parts of the wardrobe
-- Add and manage components (shelves, drawers, rails, doors)
-- Real-time 3D visualization
-- Price calculation based on selected options
+- **3D Visualization**: Real-time 3D rendering of your wardrobe design
+- **Customizable Dimensions**: Adjust width, height, and depth to fit your space
+- **Multiple Wardrobe Types**: Standard, corner, sliding, and walk-in options
+- **Component Library**: Add shelves, drawers, rails, dividers, and specialized storage
+- **Material Selection**: Choose from various materials and finishes
+- **Price Calculation**: Get instant price estimates as you design
+- **Wardrobe Templates**: Start with pre-designed templates for quick inspiration
 
-## Technologies Used
+## Wardrobe Templates
 
-- Next.js 15
-- React 19
-- TypeScript
-- Three.js
-- React Three Fiber
-- Tailwind CSS
-- Zustand (for state management)
-- Headless UI (for UI components)
+The application includes several pre-designed wardrobe templates to help users get started quickly:
+
+- **Classic Walk-in Closet**: A spacious walk-in closet with ample hanging space, drawers, and shelving
+- **Modern Sliding Wardrobe**: A contemporary wardrobe with sliding doors, perfect for bedrooms with limited space
+- **Luxury Dressing Room**: An elegant dressing room with a central island, mirror, and specialized storage for accessories
+- **Family Wardrobe**: A practical wardrobe design with sections for different family members and varied storage options
+- **Minimalist Wardrobe**: A clean, simple design with essential storage for a minimalist lifestyle
+
+To use a template:
+1. Click the "Browse Wardrobe Templates" button at the top of the control panel
+2. Browse through the available templates
+3. Select a template that matches your needs
+4. Click "Apply Template" to load it into the designer
+5. Customize the template further to suit your specific requirements
 
 ## Getting Started
 
-### Prerequisites
+1. Choose a wardrobe type (standard, corner, sliding, or walk-in)
+2. Set the dimensions to fit your space
+3. Select materials for the body, doors, and handles
+4. Add components like shelves, drawers, and rails
+5. Adjust the position and size of components as needed
+6. View the price estimate and make adjustments as necessary
 
-- Node.js 18.17 or later
+## Technical Details
 
-### Installation
+This application is built with:
+- Next.js for the frontend framework
+- Three.js for 3D rendering
+- Zustand for state management
+- Tailwind CSS for styling
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/wardrobe-3d-designer.git
-   cd wardrobe-3d-designer
-   ```
+## Development
 
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+To run the development server:
 
-3. Run the development server:
-   ```bash
-   npm run dev
-   ```
+```bash
+npm run dev
+# or
+yarn dev
+```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
-
-## Usage
-
-1. **Select Wardrobe Type**: Choose from standard, corner, sliding, or walk-in wardrobe types.
-2. **Adjust Dimensions**: Customize the width, height, and depth of your wardrobe.
-3. **Choose Materials**: Select materials for the body, doors, and handles.
-4. **Add Components**: Add shelves, drawers, rails, and doors to your wardrobe.
-5. **View Price**: See the calculated price based on your selections.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ## Project Structure
 

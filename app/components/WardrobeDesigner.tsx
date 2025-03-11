@@ -7,6 +7,8 @@ import DimensionsControl from './ui/DimensionsControl';
 import MaterialSelector from './ui/MaterialSelector';
 import ComponentsManager from './ui/ComponentsManager';
 import PriceSummary from './ui/PriceSummary';
+import TemplateSelector from './ui/TemplateSelector';
+import { BookOpenIcon } from '@heroicons/react/24/outline';
 
 const WardrobeDesigner: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'type' | 'dimensions' | 'materials' | 'components'>('type');
@@ -14,6 +16,7 @@ const WardrobeDesigner: React.FC = () => {
   const [isDesktop, setIsDesktop] = useState<boolean>(false);
   const [isHoveringResizer, setIsHoveringResizer] = useState<boolean>(false);
   const [showTooltip, setShowTooltip] = useState<boolean>(true);
+  const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const isDraggingRef = useRef<boolean>(false);
   
@@ -161,6 +164,17 @@ const WardrobeDesigner: React.FC = () => {
         
         {/* Tab Content */}
         <div className="p-4">
+          {/* Templates Button */}
+          <div className="mb-6">
+            <button
+              onClick={() => setIsTemplateModalOpen(true)}
+              className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-3 px-4 rounded-lg shadow hover:from-purple-700 hover:to-indigo-700 transition-all"
+            >
+              <BookOpenIcon className="h-5 w-5" />
+              <span>Browse Wardrobe Templates</span>
+            </button>
+          </div>
+          
           {activeTab === 'type' && <WardrobeTypeSelector />}
           {activeTab === 'dimensions' && <DimensionsControl />}
           {activeTab === 'materials' && <MaterialSelector />}
@@ -172,6 +186,12 @@ const WardrobeDesigner: React.FC = () => {
           <PriceSummary />
         </div>
       </div>
+      
+      {/* Template Selector Modal */}
+      <TemplateSelector 
+        isOpen={isTemplateModalOpen}
+        onClose={() => setIsTemplateModalOpen(false)}
+      />
     </div>
   );
 };
