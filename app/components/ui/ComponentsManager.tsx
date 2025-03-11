@@ -17,7 +17,6 @@ const ComponentsManager: React.FC = () => {
     availableMaterials, 
     addComponent, 
     removeComponent, 
-    updateComponent 
   } = useWardrobeStore();
   
   const { components, dimensions } = configuration;
