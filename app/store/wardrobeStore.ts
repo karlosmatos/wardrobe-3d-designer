@@ -39,6 +39,7 @@ interface WardrobeState {
   setMaterial: (part: keyof WardrobeConfiguration['materials'], materialId: string) => void;
   calculatePrice: () => number;
   resetConfiguration: () => void;
+  loadConfiguration: (config: WardrobeConfiguration) => void;
 }
 
 // Create the store
@@ -180,6 +181,42 @@ const useWardrobeStore = create<WardrobeState>((set, get) => ({
       price: 0,
     }
   }),
+  
+  // Load a saved configuration
+  loadConfiguration: (config) => {
+    // Ensure the loaded configuration has all required properties
+    const validConfig = {
+      ...config,
+      // If the loaded config doesn't have an id, generate a new one
+      id: config.id || uuidv4(),
+      // Ensure the type is valid, default to 'standard' if not
+      type: Object.keys(defaultDimensions).includes(config.type) 
+        ? config.type as WardrobeType 
+        : 'standard',
+      // Ensure dimensions are valid
+      dimensions: {
+        width: config.dimensions?.width || defaultDimensions['standard'].width,
+        height: config.dimensions?.height || defaultDimensions['standard'].height,
+        depth: config.dimensions?.depth || defaultDimensions['standard'].depth,
+      },
+      // Ensure components array exists
+      components: Array.isArray(config.components) ? config.components : [],
+      // Ensure materials are valid
+      materials: {
+        body: config.materials?.body || 'mat1',
+        doors: config.materials?.doors || 'mat2',
+        handles: config.materials?.handles || 'mat6',
+      },
+      // Reset price (will be recalculated)
+      price: 0,
+    };
+    
+    // Set the configuration
+    set({ configuration: validConfig });
+    
+    // Recalculate the price
+    get().calculatePrice();
+  },
 }));
 
 export default useWardrobeStore; 
