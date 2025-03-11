@@ -56,6 +56,7 @@ const ComponentsManager: React.FC = () => {
   const [editValues, setEditValues] = useState<{
     position: { x: number; y: number; z: number };
     dimensions: { width: number; height: number; depth: number };
+    rotation?: { x: number; y: number; z: number };
     material: string;
   } | null>(null);
   
@@ -65,72 +66,84 @@ const ComponentsManager: React.FC = () => {
       type: 'shelf' as const,
       position: { x: 0, y: dimensions.height / 2, z: 0 },
       dimensions: { width: dimensions.width - 10, height: 2, depth: dimensions.depth - 10 },
+      rotation: { x: 0, y: 0, z: 0 },
       material: configuration.materials.body,
     },
     drawer: {
       type: 'drawer' as const,
       position: { x: 0, y: dimensions.height / 3, z: dimensions.depth / 2 - 5 },
       dimensions: { width: dimensions.width - 10, height: 20, depth: dimensions.depth - 10 },
+      rotation: { x: 0, y: 0, z: 0 },
       material: configuration.materials.doors,
     },
     rail: {
       type: 'rail' as const,
       position: { x: 0, y: dimensions.height - 30, z: 0 },
       dimensions: { width: dimensions.width - 10, height: 2, depth: 2 },
+      rotation: { x: 0, y: 90, z: 0 }, // Rotate by default to be horizontal
       material: configuration.materials.handles,
     },
     door: {
       type: 'door' as const,
       position: { x: 0, y: dimensions.height / 2, z: dimensions.depth / 2 },
       dimensions: { width: dimensions.width / 2 - 5, height: dimensions.height - 4, depth: 2 },
+      rotation: { x: 0, y: 0, z: 0 },
       material: configuration.materials.doors,
     },
     divider: {
       type: 'divider' as const,
       position: { x: dimensions.width / 2, y: dimensions.height / 2, z: 0 },
       dimensions: { width: 2, height: dimensions.height - 10, depth: dimensions.depth - 10 },
+      rotation: { x: 0, y: 0, z: 0 },
       material: configuration.materials.body,
     },
     shoe_rack: {
       type: 'shoe_rack' as const,
       position: { x: 0, y: 20, z: 0 },
       dimensions: { width: dimensions.width - 10, height: 15, depth: dimensions.depth - 10 },
+      rotation: { x: 0, y: 0, z: 0 },
       material: configuration.materials.body,
     },
     trouser_rack: {
       type: 'trouser_rack' as const,
       position: { x: 0, y: dimensions.height / 2, z: dimensions.depth / 3 },
       dimensions: { width: dimensions.width - 20, height: 5, depth: 40 },
+      rotation: { x: 0, y: 0, z: 0 },
       material: configuration.materials.handles,
     },
     tie_rack: {
       type: 'tie_rack' as const,
       position: { x: dimensions.width / 4, y: dimensions.height / 2, z: dimensions.depth - 10 },
       dimensions: { width: 30, height: 5, depth: 10 },
+      rotation: { x: 0, y: 0, z: 0 },
       material: configuration.materials.handles,
     },
     mirror: {
       type: 'mirror' as const,
       position: { x: 0, y: dimensions.height / 2, z: dimensions.depth / 2 },
       dimensions: { width: dimensions.width / 3, height: dimensions.height / 2, depth: 1 },
+      rotation: { x: 0, y: 0, z: 0 },
       material: 'mat1', // Default to white material
     },
     lighting: {
       type: 'lighting' as const,
       position: { x: 0, y: dimensions.height - 5, z: 0 },
       dimensions: { width: dimensions.width - 20, height: 2, depth: 2 },
+      rotation: { x: 0, y: 0, z: 0 },
       material: 'mat6', // Chrome material
     },
     jewelry_tray: {
       type: 'jewelry_tray' as const,
       position: { x: 0, y: dimensions.height / 3, z: 0 },
       dimensions: { width: dimensions.width / 3, height: 5, depth: dimensions.depth / 2 },
+      rotation: { x: 0, y: 0, z: 0 },
       material: configuration.materials.body,
     },
     pull_out: {
       type: 'pull_out' as const,
       position: { x: 0, y: dimensions.height / 4, z: dimensions.depth / 2 },
       dimensions: { width: dimensions.width - 20, height: 15, depth: dimensions.depth - 20 },
+      rotation: { x: 0, y: 0, z: 0 },
       material: configuration.materials.body,
     },
   };
@@ -146,6 +159,7 @@ const ComponentsManager: React.FC = () => {
     setEditValues({
       position: { ...component.position },
       dimensions: { ...component.dimensions },
+      rotation: component.rotation ? { ...component.rotation } : { x: 0, y: 0, z: 0 },
       material: component.material,
     });
   };
@@ -162,6 +176,7 @@ const ComponentsManager: React.FC = () => {
       updateComponent(id, {
         position: editValues.position,
         dimensions: editValues.dimensions,
+        rotation: editValues.rotation,
         material: editValues.material,
       });
       setEditingComponentId(null);
@@ -172,7 +187,7 @@ const ComponentsManager: React.FC = () => {
   // Handle input change for position and dimensions
   const handleNumberInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    category: 'position' | 'dimensions',
+    category: 'position' | 'dimensions' | 'rotation',
     property: 'x' | 'y' | 'z' | 'width' | 'height' | 'depth'
   ) => {
     if (editValues) {
@@ -266,6 +281,7 @@ const ComponentsManager: React.FC = () => {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Position</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Dimensions</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Material</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Rotation</th>
                     <th className="px-6 py-3 text-right text-xs font-medium text-gray-700 uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
@@ -421,6 +437,45 @@ const ComponentsManager: React.FC = () => {
                               />
                               {materialObj?.name || 'Unknown'}
                             </div>
+                          )}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                          {isEditing ? (
+                            <div className="flex space-x-2">
+                              <div className="flex flex-col">
+                                <label className="text-xs text-gray-500">Rot X:</label>
+                                <input
+                                  type="number"
+                                  value={editValues?.rotation?.x || 0}
+                                  onChange={(e) => handleNumberInputChange(e, 'rotation', 'x')}
+                                  className="w-20 border border-gray-300 rounded px-2 py-1"
+                                />
+                              </div>
+                              <div className="flex flex-col">
+                                <label className="text-xs text-gray-500">Rot Y:</label>
+                                <input
+                                  type="number"
+                                  value={editValues?.rotation?.y || 0}
+                                  onChange={(e) => handleNumberInputChange(e, 'rotation', 'y')}
+                                  className="w-20 border border-gray-300 rounded px-2 py-1"
+                                />
+                              </div>
+                              <div className="flex flex-col">
+                                <label className="text-xs text-gray-500">Rot Z:</label>
+                                <input
+                                  type="number"
+                                  value={editValues?.rotation?.z || 0}
+                                  onChange={(e) => handleNumberInputChange(e, 'rotation', 'z')}
+                                  className="w-20 border border-gray-300 rounded px-2 py-1"
+                                />
+                              </div>
+                            </div>
+                          ) : (
+                            <span>
+                              {component.rotation ? 
+                                `X: ${component.rotation.x}°, Y: ${component.rotation.y}°, Z: ${component.rotation.z}°` : 
+                                'No rotation'}
+                            </span>
                           )}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

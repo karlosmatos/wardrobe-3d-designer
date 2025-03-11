@@ -6,6 +6,9 @@ import * as THREE from 'three';
 import useWardrobeStore from '../../store/wardrobeStore';
 import { WardrobeComponent } from '../../types/wardrobe';
 
+// Helper function to convert degrees to radians
+const degToRad = (degrees: number) => degrees * (Math.PI / 180);
+
 // Basic wardrobe frame
 const WardrobeFrame: React.FC = () => {
   const { configuration, availableMaterials } = useWardrobeStore();
@@ -69,7 +72,7 @@ const WardrobeFrame: React.FC = () => {
 // Component for rendering a shelf
 const Shelf: React.FC<{ component: WardrobeComponent }> = ({ component }) => {
   const { availableMaterials } = useWardrobeStore();
-  const { position, dimensions, material: materialId } = component;
+  const { position, dimensions, material: materialId, rotation } = component;
   
   // Find the material object
   const materialObj = availableMaterials.find(m => m.id === materialId);
@@ -84,6 +87,7 @@ const Shelf: React.FC<{ component: WardrobeComponent }> = ({ component }) => {
   return (
     <mesh 
       position={[position.x, position.y, position.z]} 
+      rotation={rotation ? [degToRad(rotation.x), degToRad(rotation.y), degToRad(rotation.z)] : [0, 0, 0]}
       material={material}
     >
       <boxGeometry args={[dimensions.width, dimensions.height, dimensions.depth]} />
@@ -94,7 +98,7 @@ const Shelf: React.FC<{ component: WardrobeComponent }> = ({ component }) => {
 // Component for rendering a drawer
 const Drawer: React.FC<{ component: WardrobeComponent }> = ({ component }) => {
   const { availableMaterials } = useWardrobeStore();
-  const { position, dimensions, material: materialId } = component;
+  const { position, dimensions, material: materialId, rotation } = component;
   
   // Find the material object
   const materialObj = availableMaterials.find(m => m.id === materialId);
@@ -107,7 +111,10 @@ const Drawer: React.FC<{ component: WardrobeComponent }> = ({ component }) => {
   });
   
   return (
-    <group position={[position.x, position.y, position.z]}>
+    <group 
+      position={[position.x, position.y, position.z]}
+      rotation={rotation ? [degToRad(rotation.x), degToRad(rotation.y), degToRad(rotation.z)] : [0, 0, 0]}
+    >
       {/* Drawer front */}
       <mesh 
         position={[0, 0, dimensions.depth / 2]} 
@@ -137,11 +144,12 @@ const Drawer: React.FC<{ component: WardrobeComponent }> = ({ component }) => {
 
 // Component for rendering a rail
 const Rail: React.FC<{ component: WardrobeComponent }> = ({ component }) => {
-  const { position, dimensions } = component;
+  const { position, dimensions, rotation } = component;
   
   return (
     <mesh 
       position={[position.x, position.y, position.z]} 
+      rotation={rotation ? [degToRad(rotation.x), degToRad(rotation.y), degToRad(rotation.z)] : [0, 0, 0]}
       material={new THREE.MeshStandardMaterial({ color: '#c0c0c0', metalness: 0.8 })}
     >
       <cylinderGeometry args={[1, 1, dimensions.width, 16]} />
@@ -152,7 +160,7 @@ const Rail: React.FC<{ component: WardrobeComponent }> = ({ component }) => {
 // Component for rendering a door
 const Door: React.FC<{ component: WardrobeComponent }> = ({ component }) => {
   const { availableMaterials, configuration } = useWardrobeStore();
-  const { position, dimensions } = component;
+  const { position, dimensions, rotation } = component;
   const { materials } = configuration;
   
   // Find the material objects
@@ -160,7 +168,10 @@ const Door: React.FC<{ component: WardrobeComponent }> = ({ component }) => {
   const handleMaterial = availableMaterials.find(m => m.id === materials.handles);
   
   return (
-    <group position={[position.x, position.y, position.z]}>
+    <group 
+      position={[position.x, position.y, position.z]}
+      rotation={rotation ? [degToRad(rotation.x), degToRad(rotation.y), degToRad(rotation.z)] : [0, 0, 0]}
+    >
       {/* Door panel */}
       <mesh 
         position={[0, 0, 0]} 
@@ -190,7 +201,7 @@ const Door: React.FC<{ component: WardrobeComponent }> = ({ component }) => {
 // Component for rendering a vertical divider
 const Divider: React.FC<{ component: WardrobeComponent }> = ({ component }) => {
   const { availableMaterials } = useWardrobeStore();
-  const { position, dimensions, material: materialId } = component;
+  const { position, dimensions, material: materialId, rotation } = component;
   
   // Find the material object
   const materialObj = availableMaterials.find(m => m.id === materialId);
@@ -205,6 +216,7 @@ const Divider: React.FC<{ component: WardrobeComponent }> = ({ component }) => {
   return (
     <mesh 
       position={[position.x, position.y, position.z]} 
+      rotation={rotation ? [degToRad(rotation.x), degToRad(rotation.y), degToRad(rotation.z)] : [0, 0, 0]}
       material={material}
     >
       <boxGeometry args={[dimensions.width, dimensions.height, dimensions.depth]} />
@@ -215,7 +227,7 @@ const Divider: React.FC<{ component: WardrobeComponent }> = ({ component }) => {
 // Component for rendering a shoe rack
 const ShoeRack: React.FC<{ component: WardrobeComponent }> = ({ component }) => {
   const { availableMaterials } = useWardrobeStore();
-  const { position, dimensions, material: materialId } = component;
+  const { position, dimensions, material: materialId, rotation } = component;
   
   // Find the material object
   const materialObj = availableMaterials.find(m => m.id === materialId);
@@ -228,7 +240,10 @@ const ShoeRack: React.FC<{ component: WardrobeComponent }> = ({ component }) => 
   });
   
   return (
-    <group position={[position.x, position.y, position.z]}>
+    <group 
+      position={[position.x, position.y, position.z]}
+      rotation={rotation ? [degToRad(rotation.x), degToRad(rotation.y), degToRad(rotation.z)] : [0, 0, 0]}
+    >
       {/* Main shelf */}
       <mesh position={[0, 0, 0]} material={material}>
         <boxGeometry args={[dimensions.width, dimensions.height, dimensions.depth]} />
@@ -247,7 +262,7 @@ const ShoeRack: React.FC<{ component: WardrobeComponent }> = ({ component }) => 
 // Component for rendering a trouser rack
 const TrouserRack: React.FC<{ component: WardrobeComponent }> = ({ component }) => {
   const { availableMaterials } = useWardrobeStore();
-  const { position, dimensions, material: materialId } = component;
+  const { position, dimensions, material: materialId, rotation } = component;
   
   // Find the material object
   const materialObj = availableMaterials.find(m => m.id === materialId);
@@ -259,7 +274,10 @@ const TrouserRack: React.FC<{ component: WardrobeComponent }> = ({ component }) 
   });
   
   return (
-    <group position={[position.x, position.y, position.z]}>
+    <group 
+      position={[position.x, position.y, position.z]}
+      rotation={rotation ? [degToRad(rotation.x), degToRad(rotation.y), degToRad(rotation.z)] : [0, 0, 0]}
+    >
       {/* Main rail */}
       <mesh position={[0, 0, 0]} material={material}>
         <boxGeometry args={[dimensions.width, dimensions.height, dimensions.depth/4]} />
@@ -281,7 +299,7 @@ const TrouserRack: React.FC<{ component: WardrobeComponent }> = ({ component }) 
 // Component for rendering a tie/belt rack
 const TieRack: React.FC<{ component: WardrobeComponent }> = ({ component }) => {
   const { availableMaterials } = useWardrobeStore();
-  const { position, dimensions, material: materialId } = component;
+  const { position, dimensions, material: materialId, rotation } = component;
   
   // Find the material object
   const materialObj = availableMaterials.find(m => m.id === materialId);
@@ -293,7 +311,10 @@ const TieRack: React.FC<{ component: WardrobeComponent }> = ({ component }) => {
   });
   
   return (
-    <group position={[position.x, position.y, position.z]}>
+    <group 
+      position={[position.x, position.y, position.z]}
+      rotation={rotation ? [degToRad(rotation.x), degToRad(rotation.y), degToRad(rotation.z)] : [0, 0, 0]}
+    >
       {/* Main bar */}
       <mesh position={[0, 0, 0]} material={material}>
         <boxGeometry args={[dimensions.width, dimensions.height, dimensions.depth]} />
@@ -314,7 +335,7 @@ const TieRack: React.FC<{ component: WardrobeComponent }> = ({ component }) => {
 
 // Component for rendering a mirror
 const Mirror: React.FC<{ component: WardrobeComponent }> = ({ component }) => {
-  const { position, dimensions } = component;
+  const { position, dimensions, rotation } = component;
   
   // Create a Three.js material for mirror
   const mirrorMaterial = new THREE.MeshStandardMaterial({
@@ -331,7 +352,10 @@ const Mirror: React.FC<{ component: WardrobeComponent }> = ({ component }) => {
   });
   
   return (
-    <group position={[position.x, position.y, position.z]}>
+    <group 
+      position={[position.x, position.y, position.z]}
+      rotation={rotation ? [degToRad(rotation.x), degToRad(rotation.y), degToRad(rotation.z)] : [0, 0, 0]}
+    >
       {/* Mirror surface */}
       <mesh position={[0, 0, 0]} material={mirrorMaterial}>
         <boxGeometry args={[dimensions.width, dimensions.height, dimensions.depth/2]} />
@@ -347,7 +371,7 @@ const Mirror: React.FC<{ component: WardrobeComponent }> = ({ component }) => {
 
 // Component for rendering LED lighting
 const Lighting: React.FC<{ component: WardrobeComponent }> = ({ component }) => {
-  const { position, dimensions } = component;
+  const { position, dimensions, rotation } = component;
   
   // Create a Three.js material for the light fixture
   const fixtureMaterial = new THREE.MeshStandardMaterial({
@@ -361,7 +385,10 @@ const Lighting: React.FC<{ component: WardrobeComponent }> = ({ component }) => 
   });
   
   return (
-    <group position={[position.x, position.y, position.z]}>
+    <group 
+      position={[position.x, position.y, position.z]}
+      rotation={rotation ? [degToRad(rotation.x), degToRad(rotation.y), degToRad(rotation.z)] : [0, 0, 0]}
+    >
       {/* Light fixture */}
       <mesh position={[0, 0, 0]} material={fixtureMaterial}>
         <boxGeometry args={[dimensions.width, dimensions.height, dimensions.depth]} />
@@ -381,7 +408,7 @@ const Lighting: React.FC<{ component: WardrobeComponent }> = ({ component }) => 
 // Component for rendering a jewelry tray
 const JewelryTray: React.FC<{ component: WardrobeComponent }> = ({ component }) => {
   const { availableMaterials } = useWardrobeStore();
-  const { position, dimensions, material: materialId } = component;
+  const { position, dimensions, material: materialId, rotation } = component;
   
   // Find the material object
   const materialObj = availableMaterials.find(m => m.id === materialId);
@@ -394,7 +421,10 @@ const JewelryTray: React.FC<{ component: WardrobeComponent }> = ({ component }) 
   });
   
   return (
-    <group position={[position.x, position.y, position.z]}>
+    <group 
+      position={[position.x, position.y, position.z]}
+      rotation={rotation ? [degToRad(rotation.x), degToRad(rotation.y), degToRad(rotation.z)] : [0, 0, 0]}
+    >
       {/* Tray base */}
       <mesh position={[0, 0, 0]} material={material}>
         <boxGeometry args={[dimensions.width, dimensions.height/2, dimensions.depth]} />
@@ -417,7 +447,7 @@ const JewelryTray: React.FC<{ component: WardrobeComponent }> = ({ component }) 
 // Component for rendering a pull-out basket
 const PullOut: React.FC<{ component: WardrobeComponent }> = ({ component }) => {
   const { availableMaterials } = useWardrobeStore();
-  const { position, dimensions, material: materialId } = component;
+  const { position, dimensions, material: materialId, rotation } = component;
   
   // Find the material object
   const materialObj = availableMaterials.find(m => m.id === materialId);
@@ -436,7 +466,10 @@ const PullOut: React.FC<{ component: WardrobeComponent }> = ({ component }) => {
   });
   
   return (
-    <group position={[position.x, position.y, position.z]}>
+    <group 
+      position={[position.x, position.y, position.z]}
+      rotation={rotation ? [degToRad(rotation.x), degToRad(rotation.y), degToRad(rotation.z)] : [0, 0, 0]}
+    >
       {/* Basket base */}
       <mesh position={[0, 0, 0]} material={material}>
         <boxGeometry args={[dimensions.width, dimensions.height/2, dimensions.depth]} />
